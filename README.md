@@ -2,8 +2,8 @@
 
 Connect your Amazon seller account to **Claude**, **ChatGPT** or any MCP client, and ask about your store in plain language. Answers come from your own Amazon data — profit is measured from the settlement reports Amazon actually posted, not from a fee calculator.
 
-**Endpoint:** `https://agentxray.ai/api/mcp` (Streamable HTTP, OAuth 2.0 with dynamic client registration)
-**Registry:** [`ai.agentxray/mcp`](https://registry.modelcontextprotocol.io/v0/servers?search=agentxray) in the official MCP Registry
+**Endpoint:** `https://agentxray.ai/api/mcp` (Streamable HTTP, OAuth 2.0 with dynamic client registration)  
+**Registry:** [`ai.agentxray/mcp`](https://registry.modelcontextprotocol.io/v0/servers?search=agentxray) in the official MCP Registry  
 **Every tool:** https://agentxray.ai/docs/mcp
 
 > This repository holds documentation only. The server is hosted; there is nothing to install or run.
