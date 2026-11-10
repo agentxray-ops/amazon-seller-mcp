@@ -1,88 +1,77 @@
-# AgentXray — Amazon Seller Central & Amazon Ads MCP server
+# AgentXray — Amazon settlement report MCP server
 
-Connect your Amazon seller account to **Claude**, **ChatGPT** or any MCP client, and ask about your store in plain language. Answers come from your own Amazon data — profit is measured from the settlement reports Amazon actually posted, not from a fee calculator.
+A local MCP server that reads your **Amazon settlement reports** and tells your AI assistant what Amazon actually paid you: sales, refunds, promotions, referral and FBA fees, storage, subscription, reimbursements, the net, and profit per SKU — **exact to the cent**, computed on your computer.
 
-**Endpoint:** `https://agentxray.ai/api/mcp` (Streamable HTTP, OAuth 2.0 with dynamic client registration)  
-**Registry:** [`ai.agentxray/mcp`](https://registry.modelcontextprotocol.io/v0/servers?search=agentxray) in the official MCP Registry  
-**Every tool:** https://agentxray.ai/docs/mcp
+- **Runs locally, works offline.** The report is read from your disk and never uploaded. No account, no API keys, no Seller Central login.
+- **Money is integer cents.** No floating-point drift; the lines reconcile to the deposit in the report header, and the server tells you when they don't.
+- **Same parser as AgentXray's [settlement reader](https://agentxray.ai/tools/settlement-profit-reader)**, checked to the cent against reference results for point and comma decimals, refunds, promotions and messy transaction types (`test/fixtures/settlement`).
 
-The server is hosted. Clients that speak remote MCP connect to the endpoint directly. For clients that only run local (stdio) servers, this repository is also a small **bridge** you can install and run: it forwards every request to the hosted server with your token.
+Works with Claude Desktop, Claude Code, Cursor, VS Code, and any MCP client that runs local (stdio) servers.
 
-## What you can ask
+## Tools
 
-- "What did I actually make in the last 30 days, after every Amazon fee?"
-- "Which of my products loses money on ads?"
-- "Which search terms are wasting my ad budget?"
-- "Is my account healthy, and is anything about to stop selling?"
-- "Did Amazon receive everything I sent?"
-- "How many returns did I get, and why?"
-
-Every answer states its **basis** (where the number came from) and its **gaps** (what it cannot see yet — Amazon settles fees 7–13 days after an order, and recent days are marked as such rather than shown as zero).
-
-## What it reads
-
-| Area | Examples |
+| Tool | What it does |
 |---|---|
-| Profit | per account and per SKU, from settlement line items; payouts and why they moved |
-| Advertising | Sponsored Products campaigns, ad groups, targets, search terms and placements, priced against your own break-even |
-| Stock | stock history, inventory age, reorder timing, Buy Box |
-| Account | Amazon's account health rating, inbound FBA shipments and units received short, listing issues, returns with reasons |
-| Your changes | what you changed through AgentXray, and whether it earned money 14 days later |
+| `read_settlement_report` | Profit and loss for one report: every bucket with its Amazon line types, net, units, orders, average price, FBA fee per unit, referral rate. Give a unit cost (`cogs_per_unit`) and it returns profit after product cost. Optional `start`/`end` date range by posted date. |
+| `settlement_profit_by_sku` | The same report grouped by SKU: units, orders, sales, fees, net and net per unit. Lines without a SKU (storage, subscription, most reimbursements) stay in their own group, so the SKUs plus that group equal the net exactly. `include_lines` shows the lines behind a SKU so you can check the arithmetic. |
+| `list_settlement_reports` | Finds the settlement reports in a folder (e.g. Downloads) with settlement id, period, deposit date and total, newest first. |
 
-## What it can change
+Every answer carries a `basis` (where the numbers came from) and `gaps` (what a settlement report cannot show — e.g. ads billed to a card, costs outside Amazon).
 
-Nothing on its own. If you grant drafting, the assistant can **propose** a change — a bid, a budget, a campaign state, a price, listing copy or an image. The proposal waits in AgentXray until a person approves it in the browser; the token your assistant holds cannot approve. After approval the change is followed for 14 days and can be undone.
+## Install
 
-## Connect
-
-**Claude (claude.ai, Desktop, mobile):** Settings → Connectors → Add custom connector → `https://agentxray.ai/api/mcp`, then sign in on the AgentXray consent screen. Step by step: https://agentxray.ai/connect/claude
-
-**ChatGPT:** Settings → Apps (Developer mode) → add `https://agentxray.ai/api/mcp`. Step by step: https://agentxray.ai/connect/chatgpt
-
-**Claude Code and other clients:**
-
-```bash
-claude mcp add --transport http agentxray https://agentxray.ai/api/mcp
-```
-
-Clients that do not run the OAuth flow can use a token created in AgentXray → Settings → AI Assistant, sent as `Authorization: Bearer <token>`.
-
-**Local stdio clients (the bridge in this repository):** create a token in AgentXray → Settings → AI Assistant, then add:
+Requires Node.js 20+.
 
 ```json
 {
   "mcpServers": {
     "agentxray": {
       "command": "npx",
-      "args": ["-y", "github:agentxray-ops/amazon-seller-mcp"],
-      "env": { "AGENTXRAY_TOKEN": "axr_..." }
+      "args": ["-y", "github:agentxray-ops/amazon-seller-mcp"]
     }
   }
 }
 ```
 
-Or with Docker: `docker build -t agentxray-mcp .` then `docker run -i --rm -e AGENTXRAY_TOKEN=axr_... agentxray-mcp`.
+Claude Code: `claude mcp add agentxray -- npx -y github:agentxray-ops/amazon-seller-mcp`
 
-With a token, the tool list and every answer come from the hosted server — the bridge stores nothing and holds no data. Without a token it still starts and lists the tool catalog (a snapshot in `src/catalog.json`), and calling a tool returns the setup steps. Try it first with the public read-only demo token on https://agentxray.ai/connect (a synthetic store, no account needed).
+Docker: `docker build -t agentxray-mcp .` then mount the folder with your reports: `docker run -i --rm -v ~/Downloads:/reports:ro agentxray-mcp` and ask about files under `/reports`.
 
-Development: `npm install` builds it; `npm test` checks both modes (set `AGENTXRAY_TOKEN` to include the live check); `AGENTXRAY_TOKEN=... npm run catalog` refreshes the snapshot.
+From source: `git clone`, `npm install` (builds), `node dist/index.js`.
 
-## Try it without an account
+## Getting a settlement report
 
-A public demo token reads a sample store (no Amazon account, no sign-up): https://agentxray.ai/connect
+Seller Central → **Payments** → **Reports Repository** → report type *Transaction* / *Settlement* → download the **flat file (.txt)** for a settlement period. Then ask, for example:
 
-## Requirements and pricing
+- "Read ~/Downloads/12345678901.txt — what did Amazon actually pay me, and where did the money go?"
+- "My landed cost is 7.40 per unit. What was my profit in that settlement?"
+- "Which SKU lost money in that period? Show me the lines for SKU-123."
+- "List the settlement reports in my Downloads folder."
 
-An AgentXray account with Amazon Seller Central connected (Amazon Ads optional). Plans start at $29/month after a 14-day trial — https://agentxray.ai/pricing
+## Optional: live data from your Amazon account
 
-## Security
+Settlement reports arrive every two weeks. If you also want live numbers — orders, Sponsored Products ads and search terms, stock and inbound shipments, account health, returns — this server can add the tools of the hosted [AgentXray](https://agentxray.ai/amazon-mcp) service. That part needs an AgentXray account and is **off unless you set a token**:
 
-Your own Amazon authorisation, revocable in Seller Central at any time; no role that exposes buyer personal data; every seller's data isolated at the database level; nothing written to Amazon without a person's approval. Details: https://agentxray.ai/security · Privacy: https://agentxray.ai/privacy
+```json
+"env": { "AGENTXRAY_TOKEN": "axr_..." }
+```
 
-## Support
+Create the token in AgentXray → Settings → AI Assistant. Those calls go to `https://agentxray.ai/api/mcp`; the settlement tools stay local either way. Clients that speak remote MCP can also connect to that endpoint directly (OAuth) — see https://agentxray.ai/connect. To try the live tools without an account, the public read-only demo token on that page reads a synthetic store.
 
-info@avantaglobalgroup.com — AgentXray is operated by Avanta Global EOOD (Sofia, Bulgaria).
+Without a token, the server makes no network requests.
+
+## Development
+
+```bash
+npm install        # installs and builds
+npm test           # parser parity + MCP server tests
+AGENTXRAY_TEST_TOKEN=axr_... npm test   # also checks the optional live tools
+```
+
+## License and contact
+
+MIT. Built by AgentXray (Avanta Global EOOD, Sofia, Bulgaria) — info@avantaglobalgroup.com · [Security](https://agentxray.ai/security) · [Privacy](https://agentxray.ai/privacy)
 
 ---
 
-Amazon, Amazon Ads, Seller Central and related marks are trademarks of Amazon.com, Inc. or its affiliates. AgentXray is an independent application listed on the Selling Partner Appstore and is not affiliated with or endorsed by Amazon. Claude is a trademark of Anthropic; ChatGPT is a trademark of OpenAI.
+Amazon and Seller Central are trademarks of Amazon.com, Inc. or its affiliates. This project is independent and not affiliated with or endorsed by Amazon. Claude is a trademark of Anthropic; ChatGPT is a trademark of OpenAI.

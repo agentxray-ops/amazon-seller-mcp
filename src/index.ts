@@ -1,21 +1,17 @@
 #!/usr/bin/env node
 /**
- * AgentXray MCP bridge — a local stdio server for the hosted AgentXray
- * Amazon Seller Central & Amazon Ads MCP server.
+ * AgentXray Amazon seller MCP server (stdio).
  *
- * With AGENTXRAY_TOKEN set, every request is forwarded to the hosted
- * endpoint over Streamable HTTP and the real answer comes back: this is a
- * working bridge, not a placeholder.
+ * Runs on your computer. Out of the box it reads Amazon settlement reports
+ * from your own disk and computes what Amazon actually settled — sales, every
+ * fee, refunds, the net, profit per SKU — in exact cents, with no account and
+ * no network access (see ./local.ts).
  *
- * Without a token it still starts and lists the tool catalog (a snapshot of
- * the hosted tools/list), so directories and inspectors can see what the
- * server offers. Calling a tool then returns setup instructions instead of
- * data.
- *
- * The bridge holds no data and no secrets of its own. The token lives in
- * your MCP client's config and is sent only to the endpoint below.
+ * Optionally, with AGENTXRAY_TOKEN set, it also adds the live tools of the
+ * hosted AgentXray server (orders, ads, stock, account health, …) by
+ * forwarding those calls to https://agentxray.ai/api/mcp. Without a token no
+ * request leaves this machine.
  */
-import { readFileSync } from "node:fs"
 import { Server } from "@modelcontextprotocol/sdk/server/index.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { Client } from "@modelcontextprotocol/sdk/client/index.js"
@@ -28,58 +24,49 @@ import {
   type CallToolResult,
   type Tool,
 } from "@modelcontextprotocol/sdk/types.js"
+import { callLocalTool, isLocalTool, localTools } from "./local.js"
 
-const VERSION = "1.2.0"
+const VERSION = "2.0.0"
 const ENDPOINT = process.env.AGENTXRAY_MCP_URL?.trim() || "https://agentxray.ai/api/mcp"
 const TOKEN = process.env.AGENTXRAY_TOKEN?.trim() || ""
 const TOKEN_PAGE = "https://agentxray.ai/app/settings?tab=assistant"
-const DEMO_PAGE = "https://agentxray.ai/connect"
 
-const SETUP_TEXT = [
-  "AgentXray is not connected yet: no AGENTXRAY_TOKEN is set for this bridge.",
+const LIVE_TEXT = [
+  "The settlement tools work offline, from report files on this computer.",
+  "",
+  "For live data (orders, Sponsored Products ads, stock, inbound shipments, account health, returns) this server can also",
+  "connect to your AgentXray account. That is optional and off until you set a token:",
   "",
   `1. Create a token in AgentXray → Settings → AI Assistant: ${TOKEN_PAGE}`,
-  `   (or try the public read-only demo token on ${DEMO_PAGE} — a synthetic store, no account needed)`,
-  "2. Add it to this server's env in your MCP client config:",
+  '2. Add it to this server\'s env in your MCP client config: "env": { "AGENTXRAY_TOKEN": "axr_..." }',
   "",
-  '   "agentxray": {',
-  '     "command": "npx",',
-  '     "args": ["-y", "github:agentxray-ops/amazon-seller-mcp"],',
-  '     "env": { "AGENTXRAY_TOKEN": "axr_..." }',
-  "   }",
-  "",
-  `Clients that speak remote MCP can skip the bridge and connect to ${ENDPOINT} directly (OAuth sign-in).`,
+  `The live tools are then forwarded to ${ENDPOINT}. Without a token nothing is sent anywhere.`,
 ].join("\n")
 
-type Catalog = { tools: Tool[] }
-const catalog: Catalog = JSON.parse(
-  readFileSync(new URL("./catalog.json", import.meta.url), "utf8"),
-)
-
-const setupTool: Tool = {
-  name: "agentxray_setup",
-  title: "How to connect AgentXray",
+const liveSetupTool: Tool = {
+  name: "agentxray_live_setup",
+  title: "Connect live Amazon data (optional)",
   description:
-    "Explains how to connect this bridge to your AgentXray account (token setup). Only listed while no token is configured.",
+    "Explains how to add live Amazon data (orders, ads, stock, account health) to this server by connecting an AgentXray account. Listed only while no AGENTXRAY_TOKEN is set; the settlement tools do not need it.",
   inputSchema: { type: "object", properties: {} },
   annotations: { readOnlyHint: true, openWorldHint: false },
 }
 
-// ---- upstream (only used when a token is set) -----------------------------
+// ---- optional upstream ----------------------------------------------------
 
 let upstream: Promise<Client> | null = null
 
 function connectUpstream(): Promise<Client> {
   if (!upstream) {
     upstream = (async () => {
-      const client = new Client({ name: "agentxray-bridge", version: VERSION })
+      const client = new Client({ name: "agentxray-local", version: VERSION })
       const transport = new StreamableHTTPClientTransport(new URL(ENDPOINT), {
         requestInit: { headers: { Authorization: `Bearer ${TOKEN}` } },
       })
       await client.connect(transport)
       return client
     })().catch((err) => {
-      upstream = null // let the next request retry instead of caching the failure
+      upstream = null // retry on the next request instead of caching the failure
       throw err
     })
   }
@@ -89,67 +76,77 @@ function connectUpstream(): Promise<Client> {
 function explain(err: unknown): string {
   const msg = err instanceof Error ? err.message : String(err)
   if (/\b401\b|unauthori[sz]ed|invalid.*token/i.test(msg)) {
-    return `AgentXray rejected the token (it may be revoked or expired). Create a new one at ${TOKEN_PAGE} and update AGENTXRAY_TOKEN.\n\nDetail: ${msg}`
+    return `AgentXray rejected the token (it may be revoked or expired). Create a new one at ${TOKEN_PAGE} and update AGENTXRAY_TOKEN. The settlement tools keep working without it.\n\nDetail: ${msg}`
   }
-  return `Could not reach AgentXray at ${ENDPOINT}. Check your connection and try again.\n\nDetail: ${msg}`
+  return `Could not reach AgentXray at ${ENDPOINT}. The settlement tools keep working offline.\n\nDetail: ${msg}`
 }
 
-// List/prompt requests have no result shape for an error, so they throw —
-// with the same plain-language reason a tool call would give.
-async function viaUpstream<T>(fn: (client: Client) => Promise<T>): Promise<T> {
+async function liveTools(): Promise<Tool[]> {
+  if (!TOKEN) return [liveSetupTool]
   try {
-    return await fn(await connectUpstream())
+    const client = await connectUpstream()
+    const tools: Tool[] = []
+    let cursor: string | undefined
+    do {
+      const page = await client.listTools(cursor ? { cursor } : {})
+      tools.push(...page.tools.filter((t) => !isLocalTool(t.name)))
+      cursor = page.nextCursor
+    } while (cursor)
+    return tools
   } catch (err) {
-    throw new Error(explain(err))
+    // A bad token or no network must not take the local tools down with it.
+    process.stderr.write(`[agentxray] live tools unavailable: ${explain(err)}\n`)
+    return []
   }
 }
 
-function errorResult(text: string): CallToolResult {
-  return { content: [{ type: "text", text }], isError: true }
-}
-
-// ---- local server ---------------------------------------------------------
+// ---- server ---------------------------------------------------------------
 
 const server = new Server(
   { name: "agentxray", version: VERSION },
   {
     capabilities: { tools: {}, prompts: {} },
-    instructions: TOKEN
-      ? "AgentXray reports measured Amazon seller numbers for the connected account. Every result carries a 'basis' saying where a number came from and may carry 'gaps'; repeat them and never fill a gap with an estimate."
-      : "AgentXray is not connected yet. Call agentxray_setup for the steps.",
+    instructions:
+      "Settlement tools read Amazon settlement reports from this computer and return exact amounts with a 'basis' and 'gaps'; repeat the gaps and never fill one with an estimate." +
+      (TOKEN ? " Live AgentXray tools are also available for the connected Amazon account." : ""),
   },
 )
 
-server.setRequestHandler(ListToolsRequestSchema, async (request) => {
-  if (!TOKEN) return { tools: [setupTool, ...catalog.tools] }
-  return viaUpstream((client) => client.listTools(request.params))
-})
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools: [...localTools, ...(await liveTools())],
+}))
 
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  const { name } = request.params
-  if (name === setupTool.name) {
-    return { content: [{ type: "text", text: SETUP_TEXT }] }
-  }
+  const { name, arguments: args } = request.params
+  if (isLocalTool(name)) return callLocalTool(name, args ?? {})
+  if (name === liveSetupTool.name) return { content: [{ type: "text", text: LIVE_TEXT }] }
   if (!TOKEN) {
-    // A catalog tool without a token: say how to connect, never pretend to answer.
-    return errorResult(`"${name}" needs a connected AgentXray account.\n\n${SETUP_TEXT}`)
+    return { content: [{ type: "text", text: `"${name}" is a live AgentXray tool.\n\n${LIVE_TEXT}` }], isError: true }
   }
   try {
     const client = await connectUpstream()
     return (await client.callTool(request.params)) as CallToolResult
   } catch (err) {
-    return errorResult(explain(err))
+    return { content: [{ type: "text", text: explain(err) }], isError: true }
   }
 })
 
 server.setRequestHandler(ListPromptsRequestSchema, async (request) => {
   if (!TOKEN) return { prompts: [] }
-  return viaUpstream((client) => client.listPrompts(request.params))
+  try {
+    return await (await connectUpstream()).listPrompts(request.params)
+  } catch {
+    return { prompts: [] }
+  }
 })
 
 server.setRequestHandler(GetPromptRequestSchema, async (request) => {
-  if (!TOKEN) throw new Error(SETUP_TEXT)
-  return viaUpstream((client) => client.getPrompt(request.params))
+  if (!TOKEN) throw new Error(LIVE_TEXT)
+  try {
+    return await (await connectUpstream()).getPrompt(request.params)
+  } catch (err) {
+    throw new Error(explain(err))
+  }
 })
 
 await server.connect(new StdioServerTransport())

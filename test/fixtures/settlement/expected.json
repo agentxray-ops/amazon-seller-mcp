@@ -1,0 +1,690 @@
+{
+  "cogs_per_unit": "7.40",
+  "cases": {
+    "simple_point": {
+      "file": {
+        "currency": "AUD",
+        "data_start": "2026-07-15",
+        "data_end": "2026-07-20",
+        "line_count": 6,
+        "age_days": 34,
+        "total_deposit": "39.46",
+        "header_delta": "0.00"
+      },
+      "ranges": {
+        "all": {
+          "start": null,
+          "end": null,
+          "without_cogs": {
+            "net": "39.46",
+            "units": 2,
+            "orders": 2,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": null,
+            "buckets": {
+              "sales": "69.98",
+              "referral_fees": "-8.82",
+              "fulfilment_fees": "-21.70"
+            }
+          },
+          "with_cogs": {
+            "net": "39.46",
+            "units": 2,
+            "orders": 2,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": "24.66",
+            "buckets": {
+              "sales": "69.98",
+              "referral_fees": "-8.82",
+              "fulfilment_fees": "-21.70"
+            }
+          }
+        },
+        "first_half": {
+          "start": "2026-07-01",
+          "end": "2026-07-15",
+          "without_cogs": {
+            "net": "19.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": null,
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          },
+          "with_cogs": {
+            "net": "19.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": "12.33",
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          }
+        },
+        "second_half": {
+          "start": "2026-07-16",
+          "end": "2026-07-31",
+          "without_cogs": {
+            "net": "19.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": null,
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          },
+          "with_cogs": {
+            "net": "19.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": "12.33",
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          }
+        },
+        "empty": {
+          "start": "2026-09-01",
+          "end": "2026-09-30",
+          "without_cogs": {
+            "net": "0.00",
+            "units": 0,
+            "orders": 0,
+            "price_per_unit": null,
+            "fulfilment_per_unit": null,
+            "referral_pct": null,
+            "profit": null,
+            "buckets": {}
+          },
+          "with_cogs": {
+            "net": "0.00",
+            "units": 0,
+            "orders": 0,
+            "price_per_unit": null,
+            "fulfilment_per_unit": null,
+            "referral_pct": null,
+            "profit": null,
+            "buckets": {}
+          }
+        }
+      }
+    },
+    "german_comma": {
+      "file": {
+        "currency": "EUR",
+        "data_start": "2026-07-15",
+        "data_end": "2026-07-20",
+        "line_count": 6,
+        "age_days": 34,
+        "total_deposit": "39.46",
+        "header_delta": "0.00"
+      },
+      "ranges": {
+        "all": {
+          "start": null,
+          "end": null,
+          "without_cogs": {
+            "net": "39.46",
+            "units": 2,
+            "orders": 2,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": null,
+            "buckets": {
+              "sales": "69.98",
+              "referral_fees": "-8.82",
+              "fulfilment_fees": "-21.70"
+            }
+          },
+          "with_cogs": {
+            "net": "39.46",
+            "units": 2,
+            "orders": 2,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": "24.66",
+            "buckets": {
+              "sales": "69.98",
+              "referral_fees": "-8.82",
+              "fulfilment_fees": "-21.70"
+            }
+          }
+        },
+        "first_half": {
+          "start": "2026-07-01",
+          "end": "2026-07-15",
+          "without_cogs": {
+            "net": "19.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": null,
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          },
+          "with_cogs": {
+            "net": "19.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": "12.33",
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          }
+        },
+        "second_half": {
+          "start": "2026-07-16",
+          "end": "2026-07-31",
+          "without_cogs": {
+            "net": "19.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": null,
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          },
+          "with_cogs": {
+            "net": "19.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": "12.33",
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          }
+        },
+        "empty": {
+          "start": "2026-09-01",
+          "end": "2026-09-30",
+          "without_cogs": {
+            "net": "0.00",
+            "units": 0,
+            "orders": 0,
+            "price_per_unit": null,
+            "fulfilment_per_unit": null,
+            "referral_pct": null,
+            "profit": null,
+            "buckets": {}
+          },
+          "with_cogs": {
+            "net": "0.00",
+            "units": 0,
+            "orders": 0,
+            "price_per_unit": null,
+            "fulfilment_per_unit": null,
+            "referral_pct": null,
+            "profit": null,
+            "buckets": {}
+          }
+        }
+      }
+    },
+    "promotion_principal": {
+      "file": {
+        "currency": "AUD",
+        "data_start": "2026-07-15",
+        "data_end": "2026-07-20",
+        "line_count": 7,
+        "age_days": 34,
+        "total_deposit": "37.46",
+        "header_delta": "0.00"
+      },
+      "ranges": {
+        "all": {
+          "start": null,
+          "end": null,
+          "without_cogs": {
+            "net": "37.46",
+            "units": 2,
+            "orders": 2,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": null,
+            "buckets": {
+              "sales": "69.98",
+              "promotions": "-2.00",
+              "referral_fees": "-8.82",
+              "fulfilment_fees": "-21.70"
+            }
+          },
+          "with_cogs": {
+            "net": "37.46",
+            "units": 2,
+            "orders": 2,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": "22.66",
+            "buckets": {
+              "sales": "69.98",
+              "promotions": "-2.00",
+              "referral_fees": "-8.82",
+              "fulfilment_fees": "-21.70"
+            }
+          }
+        },
+        "first_half": {
+          "start": "2026-07-01",
+          "end": "2026-07-15",
+          "without_cogs": {
+            "net": "17.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": null,
+            "buckets": {
+              "sales": "34.99",
+              "promotions": "-2.00",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          },
+          "with_cogs": {
+            "net": "17.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": "10.33",
+            "buckets": {
+              "sales": "34.99",
+              "promotions": "-2.00",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          }
+        },
+        "second_half": {
+          "start": "2026-07-16",
+          "end": "2026-07-31",
+          "without_cogs": {
+            "net": "19.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": null,
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          },
+          "with_cogs": {
+            "net": "19.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": "12.33",
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          }
+        },
+        "empty": {
+          "start": "2026-09-01",
+          "end": "2026-09-30",
+          "without_cogs": {
+            "net": "0.00",
+            "units": 0,
+            "orders": 0,
+            "price_per_unit": null,
+            "fulfilment_per_unit": null,
+            "referral_pct": null,
+            "profit": null,
+            "buckets": {}
+          },
+          "with_cogs": {
+            "net": "0.00",
+            "units": 0,
+            "orders": 0,
+            "price_per_unit": null,
+            "fulfilment_per_unit": null,
+            "referral_pct": null,
+            "profit": null,
+            "buckets": {}
+          }
+        }
+      }
+    },
+    "refund": {
+      "file": {
+        "currency": "AUD",
+        "data_start": "2026-07-15",
+        "data_end": "2026-07-22",
+        "line_count": 7,
+        "age_days": 32,
+        "total_deposit": "4.47",
+        "header_delta": "0.00"
+      },
+      "ranges": {
+        "all": {
+          "start": null,
+          "end": null,
+          "without_cogs": {
+            "net": "4.47",
+            "units": 2,
+            "orders": 2,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": null,
+            "buckets": {
+              "sales": "69.98",
+              "refunds": "-34.99",
+              "referral_fees": "-8.82",
+              "fulfilment_fees": "-21.70"
+            }
+          },
+          "with_cogs": {
+            "net": "4.47",
+            "units": 2,
+            "orders": 2,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": "-10.33",
+            "buckets": {
+              "sales": "69.98",
+              "refunds": "-34.99",
+              "referral_fees": "-8.82",
+              "fulfilment_fees": "-21.70"
+            }
+          }
+        },
+        "first_half": {
+          "start": "2026-07-01",
+          "end": "2026-07-15",
+          "without_cogs": {
+            "net": "19.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": null,
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          },
+          "with_cogs": {
+            "net": "19.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": "12.33",
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          }
+        },
+        "second_half": {
+          "start": "2026-07-16",
+          "end": "2026-07-31",
+          "without_cogs": {
+            "net": "-15.26",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": null,
+            "buckets": {
+              "sales": "34.99",
+              "refunds": "-34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          },
+          "with_cogs": {
+            "net": "-15.26",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": "-22.66",
+            "buckets": {
+              "sales": "34.99",
+              "refunds": "-34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          }
+        },
+        "empty": {
+          "start": "2026-09-01",
+          "end": "2026-09-30",
+          "without_cogs": {
+            "net": "0.00",
+            "units": 0,
+            "orders": 0,
+            "price_per_unit": null,
+            "fulfilment_per_unit": null,
+            "referral_pct": null,
+            "profit": null,
+            "buckets": {}
+          },
+          "with_cogs": {
+            "net": "0.00",
+            "units": 0,
+            "orders": 0,
+            "price_per_unit": null,
+            "fulfilment_per_unit": null,
+            "referral_pct": null,
+            "profit": null,
+            "buckets": {}
+          }
+        }
+      }
+    },
+    "messy_types": {
+      "file": {
+        "currency": "AUD",
+        "data_start": "2026-07-15",
+        "data_end": "2026-07-27",
+        "line_count": 9,
+        "age_days": 27,
+        "total_deposit": "-27.79",
+        "header_delta": "0.00"
+      },
+      "ranges": {
+        "all": {
+          "start": null,
+          "end": null,
+          "without_cogs": {
+            "net": "-27.79",
+            "units": 2,
+            "orders": 2,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": null,
+            "buckets": {
+              "sales": "69.98",
+              "referral_fees": "-8.82",
+              "fulfilment_fees": "-21.70",
+              "storage_fees": "-12.30",
+              "subscription": "-49.95",
+              "other": "-5.00"
+            }
+          },
+          "with_cogs": {
+            "net": "-27.79",
+            "units": 2,
+            "orders": 2,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": "-42.59",
+            "buckets": {
+              "sales": "69.98",
+              "referral_fees": "-8.82",
+              "fulfilment_fees": "-21.70",
+              "storage_fees": "-12.30",
+              "subscription": "-49.95",
+              "other": "-5.00"
+            }
+          }
+        },
+        "first_half": {
+          "start": "2026-07-01",
+          "end": "2026-07-15",
+          "without_cogs": {
+            "net": "19.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": null,
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          },
+          "with_cogs": {
+            "net": "19.73",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": "12.33",
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85"
+            }
+          }
+        },
+        "second_half": {
+          "start": "2026-07-16",
+          "end": "2026-07-31",
+          "without_cogs": {
+            "net": "-47.52",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": null,
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85",
+              "storage_fees": "-12.30",
+              "subscription": "-49.95",
+              "other": "-5.00"
+            }
+          },
+          "with_cogs": {
+            "net": "-47.52",
+            "units": 1,
+            "orders": 1,
+            "price_per_unit": "34.99",
+            "fulfilment_per_unit": "10.85",
+            "referral_pct": "12.60",
+            "profit": "-54.92",
+            "buckets": {
+              "sales": "34.99",
+              "referral_fees": "-4.41",
+              "fulfilment_fees": "-10.85",
+              "storage_fees": "-12.30",
+              "subscription": "-49.95",
+              "other": "-5.00"
+            }
+          }
+        },
+        "empty": {
+          "start": "2026-09-01",
+          "end": "2026-09-30",
+          "without_cogs": {
+            "net": "0.00",
+            "units": 0,
+            "orders": 0,
+            "price_per_unit": null,
+            "fulfilment_per_unit": null,
+            "referral_pct": null,
+            "profit": null,
+            "buckets": {}
+          },
+          "with_cogs": {
+            "net": "0.00",
+            "units": 0,
+            "orders": 0,
+            "price_per_unit": null,
+            "fulfilment_per_unit": null,
+            "referral_pct": null,
+            "profit": null,
+            "buckets": {}
+          }
+        }
+      }
+    }
+  }
+}

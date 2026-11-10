@@ -12,5 +12,5 @@ RUN npm ci --omit=dev --ignore-scripts --no-audit --no-fund && npm cache clean -
 COPY --from=build /app/dist ./dist
 ENV NODE_ENV=production
 USER node
-# Optional: -e AGENTXRAY_TOKEN=axr_... ; without it the catalog is listed and tools return setup steps.
+# Settlement tools work offline; mount your reports (-v ~/Downloads:/reports:ro). Optional live tools: -e AGENTXRAY_TOKEN=axr_...
 ENTRYPOINT ["node", "dist/index.js"]

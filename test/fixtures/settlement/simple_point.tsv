@@ -1,0 +1,8 @@
+settlement-id	settlement-start-date	settlement-end-date	deposit-date	total-amount	currency	transaction-type	order-id	sku	quantity-purchased	amount-type	amount-description	amount	posted-date
+S1	2026-07-01	2026-07-31	2026-08-02	39.46	AUD								
+S1					AUD	Order	O1	SKU1	1	ItemPrice	Principal	34.99	2026-07-15
+S1					AUD	Order	O1	SKU1		ItemFees	Commission	-4.41	2026-07-15
+S1					AUD	Order	O1	SKU1		ItemFees	FBAPerUnitFulfillmentFee	-10.85	2026-07-15
+S1					AUD	Order	O2	SKU1	1	ItemPrice	Principal	34.99	2026-07-20
+S1					AUD	Order	O2	SKU1		ItemFees	Commission	-4.41	2026-07-20
+S1					AUD	Order	O2	SKU1		ItemFees	FBAPerUnitFulfillmentFee	-10.85	2026-07-20

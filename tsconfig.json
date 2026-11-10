@@ -7,7 +7,10 @@
     "rootDir": "src",
     "strict": true,
     "skipLibCheck": true,
-    "declaration": false
+    "declaration": false,
+    "allowJs": true
   },
-  "include": ["src/**/*.ts"]
+  "include": [
+    "src/**/*.ts"
+  ]
 }

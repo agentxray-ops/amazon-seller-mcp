@@ -1,7 +1,7 @@
 {
   "name": "agentxray-mcp",
-  "version": "1.2.0",
-  "description": "Local stdio bridge to the hosted AgentXray MCP server: Amazon Seller Central and Amazon Ads for Claude, ChatGPT, Cursor and any MCP client. Profit from your own settlement reports; changes are drafts a person approves.",
+  "version": "2.0.0",
+  "description": "Amazon seller MCP server: reads your Amazon settlement reports locally and returns what Amazon actually settled (sales, every fee, refunds, net, profit per SKU) in exact cents. Optional: add live AgentXray data (orders, ads, stock) with a token.",
   "license": "MIT",
   "type": "module",
   "bin": {
@@ -11,11 +11,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc && node scripts/copy-catalog.mjs",
+    "build": "tsc && node scripts/postbuild.mjs",
     "prepare": "npm run build",
     "start": "node dist/index.js",
-    "catalog": "node scripts/refresh-catalog.mjs",
-    "test": "npm run build && node scripts/smoke.mjs"
+    "test": "npm run build && node --test test/*.test.mjs",
+    "prebuild": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.32.2"
@@ -40,7 +40,9 @@
     "model-context-protocol",
     "amazon",
     "amazon-seller-central",
-    "amazon-ads",
+    "amazon-settlement-report",
+    "amazon-fba",
+    "profit",
     "sp-api",
     "claude",
     "chatgpt"
