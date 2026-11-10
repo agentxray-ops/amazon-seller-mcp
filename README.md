@@ -6,7 +6,7 @@ Connect your Amazon seller account to **Claude**, **ChatGPT** or any MCP client,
 **Registry:** [`ai.agentxray/mcp`](https://registry.modelcontextprotocol.io/v0/servers?search=agentxray) in the official MCP Registry  
 **Every tool:** https://agentxray.ai/docs/mcp
 
-> This repository holds documentation only. The server is hosted; there is nothing to install or run.
+The server is hosted. Clients that speak remote MCP connect to the endpoint directly. For clients that only run local (stdio) servers, this repository is also a small **bridge** you can install and run: it forwards every request to the hosted server with your token.
 
 ## What you can ask
 
@@ -46,6 +46,26 @@ claude mcp add --transport http agentxray https://agentxray.ai/api/mcp
 ```
 
 Clients that do not run the OAuth flow can use a token created in AgentXray → Settings → AI Assistant, sent as `Authorization: Bearer <token>`.
+
+**Local stdio clients (the bridge in this repository):** create a token in AgentXray → Settings → AI Assistant, then add:
+
+```json
+{
+  "mcpServers": {
+    "agentxray": {
+      "command": "npx",
+      "args": ["-y", "github:agentxray-ops/amazon-seller-mcp"],
+      "env": { "AGENTXRAY_TOKEN": "axr_..." }
+    }
+  }
+}
+```
+
+Or with Docker: `docker build -t agentxray-mcp .` then `docker run -i --rm -e AGENTXRAY_TOKEN=axr_... agentxray-mcp`.
+
+With a token, the tool list and every answer come from the hosted server — the bridge stores nothing and holds no data. Without a token it still starts and lists the tool catalog (a snapshot in `src/catalog.json`), and calling a tool returns the setup steps. Try it first with the public read-only demo token on https://agentxray.ai/connect (a synthetic store, no account needed).
+
+Development: `npm install` builds it; `npm test` checks both modes (set `AGENTXRAY_TOKEN` to include the live check); `AGENTXRAY_TOKEN=... npm run catalog` refreshes the snapshot.
 
 ## Try it without an account
 

@@ -1,0 +1,49 @@
+{
+  "name": "agentxray-mcp",
+  "version": "1.2.0",
+  "description": "Local stdio bridge to the hosted AgentXray MCP server: Amazon Seller Central and Amazon Ads for Claude, ChatGPT, Cursor and any MCP client. Profit from your own settlement reports; changes are drafts a person approves.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "agentxray-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && node scripts/copy-catalog.mjs",
+    "prepare": "npm run build",
+    "start": "node dist/index.js",
+    "catalog": "node scripts/refresh-catalog.mjs",
+    "test": "npm run build && node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "homepage": "https://agentxray.ai/amazon-mcp",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agentxray-ops/amazon-seller-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/agentxray-ops/amazon-seller-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "amazon",
+    "amazon-seller-central",
+    "amazon-ads",
+    "sp-api",
+    "claude",
+    "chatgpt"
+  ],
+  "author": "Avanta Global EOOD (AgentXray)"
+}
