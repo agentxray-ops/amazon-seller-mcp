@@ -56,7 +56,7 @@ Settlement reports arrive every two weeks. If you also want live numbers — ord
 "env": { "AGENTXRAY_TOKEN": "axr_..." }
 ```
 
-Create the token in AgentXray → Settings → AI Assistant. Those calls go to `https://agentxray.ai/api/mcp`; the settlement tools stay local either way. Clients that speak remote MCP can also connect to that endpoint directly (OAuth) — see https://agentxray.ai/connect. To try the live tools without an account, the public read-only demo token on that page reads a synthetic store.
+Create the token in AgentXray → Settings → AI Assistant. Those calls go to `https://agentxray.ai/api/mcp`; the settlement tools stay local either way. Clients that speak remote MCP can also connect to that endpoint directly (OAuth): setup pages for Claude, ChatGPT, Claude Code and Grok are at https://agentxray.ai/connect. To try the live tools without an account, the public read-only demo token on that page reads a synthetic store.
 
 Without a token, the server makes no network requests.
 
